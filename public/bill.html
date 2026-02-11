@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Bill Generator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0a1628 0%, #1a2744 50%, #0d2137 100%);
+            min-height: 100vh;
+            color: white;
+            padding: 30px 20px;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: rgba(255, 255, 255, 0.5);
+            text-decoration: none;
+            font-size: 0.82rem;
+            margin-bottom: 12px;
+            transition: color 0.3s;
+        }
+
+        .back-link:hover {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .page-header h1 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #64b5f6, #42a5f5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 4px;
+        }
+
+        .page-header p {
+            font-size: 0.82rem;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        /* Layout */
+        .layout {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        @media (max-width: 768px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Panel */
+        .panel {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 28px;
+        }
+
+        .panel h2 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Form elements */
+        label {
+            display: block;
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 4px;
+            margin-top: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        label:first-of-type {
+            margin-top: 0;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 10px 14px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            outline: none;
+            font-family: inherit;
+            font-size: 0.88rem;
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            transition: border-color 0.3s;
+        }
+
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.25);
+        }
+
+        input:focus {
+            border-color: rgba(100, 181, 246, 0.4);
+        }
+
+        /* Items section */
+        .items-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 18px;
+            margin-bottom: 10px;
+        }
+
+        .items-header h3 {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-add-item {
+            padding: 6px 14px;
+            border-radius: 8px;
+            border: 1px solid rgba(100, 181, 246, 0.3);
+            background: rgba(100, 181, 246, 0.08);
+            color: #64b5f6;
+            font-size: 0.78rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: inherit;
+            width: auto;
+            margin: 0;
+        }
+
+        .btn-add-item:hover {
+            background: rgba(100, 181, 246, 0.15);
+            transform: none;
+            box-shadow: none;
+        }
+
+        .item-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 32px;
+            gap: 8px;
+            margin-bottom: 8px;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .item-row input {
+            padding: 8px 10px;
+            font-size: 0.82rem;
+        }
+
+        .btn-remove {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            border: none;
+            background: rgba(255, 77, 77, 0.1);
+            color: #ff4d4d;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            padding: 0;
+            margin: 0;
+            transition: all 0.3s;
+        }
+
+        .btn-remove:hover {
+            background: rgba(255, 77, 77, 0.2);
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Buttons */
+        button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-weight: 600;
+            font-size: 0.88rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            font-family: inherit;
+        }
+
+        button:hover:not(:disabled) {
+            transform: translateY(-2px);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-generate {
+            background: linear-gradient(135deg, #64b5f6, #42a5f5);
+            margin-top: 20px;
+        }
+
+        .btn-generate:hover:not(:disabled) {
+            box-shadow: 0 8px 25px rgba(100, 181, 246, 0.25);
+        }
+
+        .btn-share {
+            background: linear-gradient(135deg, #25D366, #128C7E);
+        }
+
+        .btn-share:hover:not(:disabled) {
+            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.25);
+        }
+
+        /* Invoice preview */
+        .invoice-preview {
+            display: none;
+        }
+
+        .invoice-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 14px;
+            padding: 24px;
+            margin-bottom: 16px;
+        }
+
+        .invoice-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 18px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .invoice-top .inv-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #64b5f6;
+        }
+
+        .invoice-top .inv-number {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.4);
+            text-align: right;
+        }
+
+        .invoice-detail {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.82rem;
+            margin-bottom: 8px;
+        }
+
+        .invoice-detail .label {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .invoice-detail .value {
+            font-weight: 500;
+        }
+
+        .invoice-items-table {
+            width: 100%;
+            margin: 16px 0;
+            border-collapse: collapse;
+        }
+
+        .invoice-items-table th {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: rgba(255, 255, 255, 0.35);
+            text-align: left;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .invoice-items-table th:last-child {
+            text-align: right;
+        }
+
+        .invoice-items-table td {
+            font-size: 0.85rem;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .invoice-items-table td:last-child {
+            text-align: right;
+            font-weight: 600;
+        }
+
+        .invoice-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 12px;
+            padding-top: 14px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .invoice-total .total-label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .invoice-total .total-value {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #64b5f6;
+        }
+
+        /* Share section */
+        .share-section {
+            margin-top: 16px;
+        }
+
+        .share-section input {
+            margin-bottom: 8px;
+        }
+
+        /* Bills list */
+        .bills-list {
+            margin-top: 20px;
+        }
+
+        .bills-list h3 {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+
+        .bill-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 14px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .bill-item:hover {
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .bill-item .bill-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .bill-item .bill-customer {
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .bill-item .bill-meta {
+            font-size: 0.72rem;
+            color: rgba(255, 255, 255, 0.35);
+        }
+
+        .bill-item .bill-amount {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #64b5f6;
+        }
+
+        .no-bills {
+            text-align: center;
+            padding: 30px;
+            color: rgba(255, 255, 255, 0.25);
+            font-size: 0.85rem;
+        }
+
+        /* WA status badge */
+        .wa-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.72rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .wa-status.connected {
+            background: rgba(0, 255, 136, 0.08);
+            color: #00ff88;
+            border: 1px solid rgba(0, 255, 136, 0.15);
+        }
+
+        .wa-status.not-connected {
+            background: rgba(255, 77, 77, 0.08);
+            color: #ff4d4d;
+            border: 1px solid rgba(255, 77, 77, 0.15);
+        }
+
+        .wa-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .wa-status.connected .wa-dot {
+            background: #00ff88;
+        }
+
+        .wa-status.not-connected .wa-dot {
+            background: #ff4d4d;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            z-index: 1000;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-family: inherit;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .toast.success {
+            background: rgba(0, 255, 136, 0.15);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            color: #00ff88;
+        }
+
+        .toast.error {
+            background: rgba(255, 77, 77, 0.15);
+            border: 1px solid rgba(255, 77, 77, 0.3);
+            color: #ff4d4d;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="page-header">
+        <a href="/" class="back-link">← Back to Home</a>
+        <h1>🧾 Bill Generator</h1>
+        <p>Create invoices & share via WhatsApp</p>
+    </div>
+
+    <div class="layout">
+
+        <!-- Left: Form -->
+        <div class="panel">
+            <h2>📝 New Invoice</h2>
+
+            <label>Customer Name</label>
+            <input type="text" id="customerName" placeholder="e.g. Rajesh Kumar">
+
+            <label>Customer Phone</label>
+            <input type="text" id="customerPhone" placeholder="10 digit number">
+
+            <div class="items-header">
+                <h3>Items</h3>
+                <button class="btn-add-item" onclick="addItem()">+ Add Item</button>
+            </div>
+
+            <div id="itemsContainer">
+                <div class="item-row">
+                    <input type="text" placeholder="Item name" class="item-name">
+                    <input type="number" placeholder="Qty" class="item-qty" value="1" min="1">
+                    <input type="number" placeholder="Price" class="item-price" step="0.01">
+                    <button class="btn-remove" onclick="removeItem(this)" title="Remove">×</button>
+                </div>
+            </div>
+
+            <button class="btn-generate" onclick="generateBill()">
+                🧾 Generate Invoice
+            </button>
+        </div>
+
+        <!-- Right: Preview & History -->
+        <div class="panel">
+            <h2>📄 Invoice Preview</h2>
+
+            <div id="waStatus" class="wa-status not-connected">
+                <span class="wa-dot"></span> WhatsApp Not Connected
+            </div>
+
+            <div id="invoicePreview" class="invoice-preview">
+                <div class="invoice-card">
+                    <div class="invoice-top">
+                        <div class="inv-title">INVOICE</div>
+                        <div class="inv-number">
+                            <div id="prevInvNo">-</div>
+                            <div id="prevInvDate">-</div>
+                        </div>
+                    </div>
+
+                    <div class="invoice-detail">
+                        <span class="label">Customer</span>
+                        <span class="value" id="prevCustomer">-</span>
+                    </div>
+                    <div class="invoice-detail">
+                        <span class="label">Phone</span>
+                        <span class="value" id="prevPhone">-</span>
+                    </div>
+
+                    <table class="invoice-items-table">
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th>Qty</th>
+                                <th>Price</th>
+                                <th style="text-align:right">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody id="prevItems"></tbody>
+                    </table>
+
+                    <div class="invoice-total">
+                        <span class="total-label">Grand Total</span>
+                        <span class="total-value" id="prevTotal">₹0</span>
+                    </div>
+                </div>
+
+                <div class="share-section">
+                    <button class="btn-share" id="shareBtn" onclick="shareBill()">
+                        📤 Share as PDF via WhatsApp
+                    </button>
+                </div>
+            </div>
+
+            <!-- Bills history -->
+            <div class="bills-list">
+                <h3>Recent Bills</h3>
+                <div id="billsList">
+                    <div class="no-bills">No bills yet. Create your first invoice!</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Toast notification -->
+    <div id="toast" class="toast"></div>
+
+    <script>
+        let currentBill = null;
+        let waConnected = false;
+
+        // Check WhatsApp status
+        async function checkWAStatus() {
+            try {
+                const res = await fetch("/qr");
+                const data = await res.json();
+                waConnected = data.ready;
+                const badge = document.getElementById("waStatus");
+                if (waConnected) {
+                    badge.className = "wa-status connected";
+                    badge.innerHTML = '<span class="wa-dot"></span> WhatsApp Connected';
+                } else {
+                    badge.className = "wa-status not-connected";
+                    badge.innerHTML = '<span class="wa-dot"></span> WhatsApp Not Connected';
+                }
+            } catch (e) {
+                waConnected = false;
+            }
+        }
+
+        setInterval(checkWAStatus, 5000);
+        checkWAStatus();
+
+        // Add item row
+        function addItem() {
+            const container = document.getElementById("itemsContainer");
+            const row = document.createElement("div");
+            row.className = "item-row";
+            row.innerHTML = `
+                <input type="text" placeholder="Item name" class="item-name">
+                <input type="number" placeholder="Qty" class="item-qty" value="1" min="1">
+                <input type="number" placeholder="Price" class="item-price" step="0.01">
+                <button class="btn-remove" onclick="removeItem(this)" title="Remove">×</button>
+            `;
+            container.appendChild(row);
+        }
+
+        // Remove item row
+        function removeItem(btn) {
+            const rows = document.querySelectorAll(".item-row");
+            if (rows.length > 1) {
+                btn.closest(".item-row").remove();
+            } else {
+                showToast("Need at least one item", "error");
+            }
+        }
+
+        // Collect items from form
+        function getItems() {
+            const rows = document.querySelectorAll(".item-row");
+            const items = [];
+            rows.forEach(row => {
+                const name = row.querySelector(".item-name").value.trim();
+                const qty = parseInt(row.querySelector(".item-qty").value) || 0;
+                const price = parseFloat(row.querySelector(".item-price").value) || 0;
+                if (name && qty > 0 && price > 0) {
+                    items.push({ name, qty, price, total: qty * price });
+                }
+            });
+            return items;
+        }
+
+        // Generate bill
+        async function generateBill() {
+            const customerName = document.getElementById("customerName").value.trim();
+            const customerPhone = document.getElementById("customerPhone").value.trim();
+            const items = getItems();
+
+            if (!customerName) {
+                showToast("Please enter customer name", "error");
+                return;
+            }
+            if (!customerPhone || customerPhone.length < 10) {
+                showToast("Please enter valid 10 digit phone", "error");
+                return;
+            }
+            if (items.length === 0) {
+                showToast("Add at least one valid item", "error");
+                return;
+            }
+
+            const bill = {
+                customerName,
+                customerPhone,
+                items
+            };
+
+            const btn = document.querySelector(".btn-generate");
+            btn.disabled = true;
+            btn.textContent = "Generating...";
+
+            try {
+                const res = await fetch("/bills", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(bill)
+                });
+                const data = await res.json();
+
+                if (data.success) {
+                    currentBill = data.bill;
+                    showPreview(data.bill);
+                    loadBills();
+                    showToast("✅ Invoice generated!", "success");
+                } else {
+                    showToast("❌ " + (data.error || "Failed to generate"), "error");
+                }
+            } catch (err) {
+                showToast("❌ Network error", "error");
+            } finally {
+                btn.disabled = false;
+                btn.textContent = "🧾 Generate Invoice";
+            }
+        }
+
+        // Show invoice preview
+        function showPreview(bill) {
+            document.getElementById("invoicePreview").style.display = "block";
+            document.getElementById("prevInvNo").textContent = "#" + bill.invoiceNumber;
+            document.getElementById("prevInvDate").textContent = new Date(bill.date).toLocaleDateString("en-IN");
+            document.getElementById("prevCustomer").textContent = bill.customerName;
+            document.getElementById("prevPhone").textContent = bill.customerPhone;
+
+            const tbody = document.getElementById("prevItems");
+            tbody.innerHTML = "";
+            bill.items.forEach(item => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td>${item.name}</td>
+                    <td>${item.qty}</td>
+                    <td>₹${item.price.toFixed(2)}</td>
+                    <td>₹${item.total.toFixed(2)}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            document.getElementById("prevTotal").textContent = "₹" + bill.grandTotal.toFixed(2);
+        }
+
+        // Share bill via WhatsApp
+        async function shareBill() {
+            if (!currentBill) {
+                showToast("Generate a bill first", "error");
+                return;
+            }
+            if (!waConnected) {
+                showToast("Connect WhatsApp first", "error");
+                return;
+            }
+
+            const btn = document.getElementById("shareBtn");
+            btn.disabled = true;
+            btn.textContent = "📤 Sending PDF...";
+
+            try {
+                const res = await fetch("/send-bill", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ invoiceNumber: currentBill.invoiceNumber })
+                });
+                const data = await res.json();
+
+                if (data.success) {
+                    showToast("✅ PDF sent via WhatsApp!", "success");
+                } else {
+                    showToast("❌ " + (data.error || "Failed to send"), "error");
+                }
+            } catch (err) {
+                showToast("❌ Network error", "error");
+            } finally {
+                btn.disabled = false;
+                btn.textContent = "📤 Share as PDF via WhatsApp";
+            }
+        }
+
+        // Load bills history
+        async function loadBills() {
+            try {
+                const res = await fetch("/bills");
+                const data = await res.json();
+
+                const container = document.getElementById("billsList");
+
+                if (!data.bills || data.bills.length === 0) {
+                    container.innerHTML = '<div class="no-bills">No bills yet. Create your first invoice!</div>';
+                    return;
+                }
+
+                container.innerHTML = "";
+                // Show most recent first
+                data.bills.slice().reverse().forEach(bill => {
+                    const div = document.createElement("div");
+                    div.className = "bill-item";
+                    div.onclick = () => {
+                        currentBill = bill;
+                        showPreview(bill);
+                    };
+                    div.innerHTML = `
+                        <div class="bill-info">
+                            <span class="bill-customer">${bill.customerName}</span>
+                            <span class="bill-meta">#${bill.invoiceNumber} · ${new Date(bill.date).toLocaleDateString("en-IN")}</span>
+                        </div>
+                        <span class="bill-amount">₹${bill.grandTotal.toFixed(2)}</span>
+                    `;
+                    container.appendChild(div);
+                });
+            } catch (err) {
+                // ignore
+            }
+        }
+
+        loadBills();
+
+        // Toast helper
+        function showToast(message, type) {
+            const toast = document.getElementById("toast");
+            toast.textContent = message;
+            toast.className = `toast ${type} show`;
+            setTimeout(() => {
+                toast.classList.remove("show");
+            }, 3000);
+        }
+    </script>
+
+</body>
+
+</html>

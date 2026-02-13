@@ -12,8 +12,10 @@
   "type": "commonjs",
   "dependencies": {
     "body-parser": "^2.2.2",
+    "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
     "express": "^5.2.1",
+    "multer": "^2.0.2",
     "pdfkit": "^0.17.2",
     "qrcode": "^1.5.4",
     "whatsapp-web.js": "^1.34.6"

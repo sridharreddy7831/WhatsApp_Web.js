@@ -1,0 +1,26 @@
+[
+  {
+    "key": "nxr_live_b05ca9c122e1b2d855806f988c23612550755c46b0b9a5f0",
+    "name": "Test Integration App",
+    "createdAt": "2026-02-13T08:13:27.630Z",
+    "active": true,
+    "rateLimit": 100,
+    "usage": {
+      "today": 3,
+      "total": 3,
+      "lastReset": "2026-02-13"
+    }
+  },
+  {
+    "key": "nxr_live_ae8d93287e18e1ba0a0d9de85d894b816ffb33449ebca810",
+    "name": "Test_01",
+    "createdAt": "2026-02-13T08:18:54.082Z",
+    "active": true,
+    "rateLimit": 100,
+    "usage": {
+      "today": 1,
+      "total": 1,
+      "lastReset": "2026-02-13"
+    }
+  }
+]

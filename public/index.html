@@ -22,7 +22,98 @@
             align-items: center;
             justify-content: center;
             color: white;
-            overflow: hidden;
+            overflow-x: hidden;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 20px 40px;
+            z-index: 10;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 16px;
+        }
+
+        .btn-auth {
+            padding: 10px 24px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-login {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-login:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .btn-signup {
+            background: linear-gradient(135deg, #25D366, #128C7E);
+            color: white;
+            border: none;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+        }
+
+        .btn-signup:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4);
+        }
+
+        .user-view {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .user-badge {
+            padding: 8px 20px;
+            border-radius: 30px;
+            background: rgba(37, 211, 102, 0.15);
+            border: 1px solid rgba(37, 211, 102, 0.3);
+            color: #4ade80;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-logout {
+            padding: 8px 16px;
+            border-radius: 10px;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            background: rgba(239, 68, 68, 0.15);
+            color: #fca5a5;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-logout:hover {
+            background: rgba(239, 68, 68, 0.25);
+            color: #fecaca;
         }
 
         /* Animated background orbs */
@@ -81,6 +172,7 @@
             margin-bottom: 50px;
             position: relative;
             z-index: 1;
+            margin-top: 60px;
         }
 
         .header .logo {
@@ -144,6 +236,7 @@
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             text-decoration: none;
             color: white;
+            display: block;
         }
 
         .card::before {
@@ -187,6 +280,28 @@
         .card.bill:hover {
             background: linear-gradient(135deg, rgba(100, 181, 246, 0.2), rgba(66, 133, 244, 0.15));
             box-shadow: 0 20px 60px rgba(100, 181, 246, 0.2), 0 0 40px rgba(100, 181, 246, 0.08);
+        }
+
+        /* Invoice card */
+        .card.invoice {
+            background: linear-gradient(135deg, rgba(255, 152, 0, 0.12), rgba(245, 124, 0, 0.08));
+            backdrop-filter: blur(20px);
+        }
+
+        .card.invoice:hover {
+            background: linear-gradient(135deg, rgba(255, 152, 0, 0.2), rgba(245, 124, 0, 0.15));
+            box-shadow: 0 20px 60px rgba(255, 152, 0, 0.2), 0 0 40px rgba(255, 152, 0, 0.08);
+        }
+
+        /* API card */
+        .card.api {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.12), rgba(139, 92, 246, 0.08));
+            backdrop-filter: blur(20px);
+        }
+
+        .card.api:hover {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(139, 92, 246, 0.15));
+            box-shadow: 0 20px 60px rgba(168, 85, 247, 0.2), 0 0 40px rgba(168, 85, 247, 0.08);
         }
 
         .card .icon {
@@ -248,6 +363,14 @@
             animation: slideUp 0.6s ease 0.25s both;
         }
 
+        .card:nth-child(3) {
+            animation: slideUp 0.6s ease 0.4s both;
+        }
+
+        .card:nth-child(4) {
+            animation: slideUp 0.6s ease 0.55s both;
+        }
+
         @keyframes slideUp {
             from {
                 opacity: 0;
@@ -273,11 +396,51 @@
             .header h1 {
                 font-size: 1.6rem;
             }
+
+            .top-bar {
+                padding: 15px 20px;
+                justify-content: center;
+            }
+        }
+    </style>
+    <style>
+        /* Top Login Button */
+        .top-login {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+        }
+
+        .btn-login-shortcut {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 24px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-login-shortcut:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
     </style>
 </head>
 
 <body>
+
+    <div class="top-login">
+        <a href="/login.html" class="btn-login-shortcut">Login 🔐</a>
+    </div>
 
     <div class="bg-orb orb1"></div>
     <div class="bg-orb orb2"></div>
@@ -305,9 +468,27 @@
             <div class="arrow">→</div>
         </a>
 
+        <a href="/invoice.html" class="card invoice">
+            <span class="icon">📄</span>
+            <h3>Invoice Generator</h3>
+            <p>GST invoices with A4 & Thermal print formats</p>
+            <div class="arrow">→</div>
+        </a>
+
+        <a href="/api/docs" class="card api">
+            <span class="icon">🔗</span>
+            <h3>API & Integrations</h3>
+            <p>REST API docs, generate keys & integrate with your apps</p>
+            <div class="arrow">→</div>
+        </a>
+
     </div>
 
     <div class="footer">Powered by WhatsApp Web.js</div>
+
+    <script>
+
+    </script>
 
 </body>
 

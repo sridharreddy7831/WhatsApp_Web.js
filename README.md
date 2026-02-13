@@ -1,7 +1,7 @@
 <p align="center">
   <h1 align="center">💼 WhatsApp Bill Manager</h1>
   <p align="center">
-    <strong>Generate invoices & share them as PDFs directly via WhatsApp — all from one dashboard.</strong>
+    <strong>Generate GST invoices, manage bills, and authenticate users via WhatsApp — all from one dashboard.</strong>
   </p>
   <p align="center">
     <img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" alt="Node.js" />
@@ -18,55 +18,68 @@
 
 - [Overview](#-overview)
 - [Features](#-features)
+- [Authentication](#-authentication)
 - [Tech Stack](#-tech-stack)
 - [Project Structure](#-project-structure)
 - [Getting Started](#-getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-  - [Running the Application](#running-the-application)
 - [Usage](#-usage)
 - [API Reference](#-api-reference)
-- [Configuration](#-configuration)
-- [Contributing](#-contributing)
 - [License](#-license)
 
 ---
 
 ## 🌟 Overview
 
-**WhatsApp Bill Manager** is a full-stack web application that lets you connect to WhatsApp via QR code, generate professional invoices, and send them as PDF documents directly to your customers' WhatsApp — all without saving any files to disk.
+**WhatsApp Bill Manager** is a comprehensive full-stack web application designed for small businesses and shopkeepers. It combines powerful invoice generation with seamless WhatsApp integration.
 
-Built with a sleek, modern glassmorphism UI and powered by `whatsapp-web.js`, this tool is perfect for small businesses, freelancers, and shopkeepers who want a quick and elegant way to bill their customers.
+Key capabilities include:
+- **WhatsApp Authentication**: Log in users using their mobile number and OTP sent via WhatsApp.
+- **GST Invoicing**: Generate professional A4 and Thermal invoices with GST calculations.
+- **Direct Sharing**: Send invoices as PDF documents directly to customers' WhatsApp.
+- **API Integration**: Robust REST API with API Key authentication for external integrations.
 
 ---
 
 ## ✨ Features
 
+### 🔐 Multi-Session Authentication
+- **Mobile Login**: Secure login using 10-digit Indian mobile numbers.
+- **WhatsApp OTP**: Verification codes sent directly to the user's WhatsApp.
+- **Multi-Device Support**: Multiple users can be logged in simultaneously across different devices.
+- **Session Management**: Secure, persistent sessions with auto-expiry.
+
 ### 📱 WhatsApp Integration
-- **QR Code Authentication** — Scan once to connect your WhatsApp account
-- **Real-time Connection Status** — Live status updates (Connected / Connecting / Reconnecting / Disconnected)
-- **Auto-Reconnect** — Exponential backoff reconnection with configurable retry delays
-- **Send Text Messages** — Direct messaging to any Indian WhatsApp number
-- **Manual Disconnect & Re-pair** — Cleanly destroy sessions and re-authenticate
+- **QR Code Connection**: Scan to link your business WhatsApp account.
+- **Real-time Status**: Live connection monitoring (Connected/Disconnected/Reconnecting).
+- **Auto-Reconnect**: Intelligent reconnection logic with exponential backoff.
+- **Direct Messaging**: Send text messages and PDFs programmatically.
 
-### 🧾 Invoice / Bill Generation
-- **Create Professional Invoices** — Auto-generated invoice numbers (`INV-YYMMDD-XXX`)
-- **Multi-Item Support** — Add unlimited line items with quantity and price
-- **Real-time Preview** — Instant invoice preview before sending
-- **Invoice History** — Browse all previously generated invoices
-- **JSON Persistence** — Bills stored locally in `bills.json`
+### 🧾 GST Invoice Generator
+- **Professional Templates**: minimal, GST-compliant A4 layouts, and Thermal printer support.
+- **Automatic Calculations**: Auto-calculates CGST, SGST, IGST, and Grand Totals.
+- **Number to Words**: Automatically converts total amounts to words (Indian Rupee format).
+- **Shop Settings**: Configure shop details, logo, signature, and banking information.
+- **PDF Generation**: High-performance in-memory PDF generation using `pdfkit`.
 
-### 📤 PDF Sharing via WhatsApp
-- **In-Memory PDF Generation** — PDFs are generated using `pdfkit` entirely in memory (no temp files)
-- **Direct WhatsApp Delivery** — Send the PDF as a WhatsApp media message with a formatted caption
-- **Professional PDF Layout** — Clean, formatted invoices with header, itemized table, and grand total
+### 🎨 Premium Dashboard
+- **Glassmorphism UI**: Modern, dark-themed interface with backdrop blur effects.
+- **Quick Shortcuts**: Easy access to WhatsApp, Bill Generator, and API docs.
+- **Responsive**: Fully responsive design for mobile and desktop.
 
-### 🎨 Premium UI/UX
-- **Glassmorphism Design** — Frosted glass cards with backdrop blur effects
-- **Dark Mode** — Elegant deep blue gradient backgrounds
-- **Micro-Animations** — Smooth transitions, hover effects, and staggered card animations
-- **Responsive Layout** — Works beautifully on desktop and mobile devices
-- **Toast Notifications** — Non-intrusive success/error feedback
+---
+
+## 🔐 Authentication
+
+The application features a built-in authentication system:
+
+1. **Login**: Click the "Login 🔐" shortcut on the homepage.
+2. **Enter Mobile**: Input your 10-digit mobile number and solve the captcha.
+3. **Receive OTP**: A 6-digit OTP is sent to your WhatsApp number from the connected business account.
+4. **Verify**: Enter the OTP to log in.
+5. **Welcome**: You are redirected to a personalized welcome page (`/welcome.html`).
+6. **Logout**: Click the "Logout 🚪" button to end the session.
+
+> **Note**: The core dashboard pages are accessible publicly by default (as per configuration), but the auth system provides a secure layer for user identification.
 
 ---
 
@@ -78,9 +91,9 @@ Built with a sleek, modern glassmorphism UI and powered by `whatsapp-web.js`, th
 | **Server**   | [Express 5](https://expressjs.com/)                                |
 | **WhatsApp** | [whatsapp-web.js](https://github.com/pedroslopez/whatsapp-web.js)  |
 | **PDF**      | [PDFKit](https://pdfkit.org/)                                      |
-| **QR Code**  | [qrcode](https://www.npmjs.com/package/qrcode)                     |
-| **Frontend** | Vanilla HTML, CSS, JavaScript                                      |
-| **Storage**  | JSON file (`bills.json`)                                           |
+| **Auth**     | Custom OTP & Session Management (Cookies)                          |
+| **Frontend** | Vanilla HTML5, CSS3 (Glassmorphism), JavaScript                    |
+| **Storage**  | JSON Files (`bills.json`, `shop-settings.json`, `api-keys.json`)   |
 
 ---
 
@@ -89,15 +102,17 @@ Built with a sleek, modern glassmorphism UI and powered by `whatsapp-web.js`, th
 ```
 whatsapp-qr-bill/
 ├── public/                  # Static frontend files
-│   ├── index.html           # Landing page with navigation cards
-│   ├── whatsapp.html        # WhatsApp connection & messaging page
-│   └── bill.html            # Bill generator & invoice preview page
-├── .wwebjs_auth/            # WhatsApp session data (auto-generated)
-├── .wwebjs_cache/           # Puppeteer browser cache (auto-generated)
-├── bills.json               # Persistent invoice storage
-├── server.js                # Express server — API routes, WhatsApp client, PDF generation
-├── package.json             # Project metadata & dependencies
-└── README.md                # You are here!
+│   ├── index.html           # Dashboard with Login shortcut
+│   ├── login.html           # Authentication page (Login/Signup)
+│   ├── welcome.html         # Post-login welcome page
+│   ├── whatsapp.html        # WhatsApp connection manager
+│   ├── invoice.html         # Advanced GST Invoice Generator
+│   ├── bill.html            # Simple Bill Generator
+│   └── api-docs.html        # API Documentation
+├── .wwebjs_auth/            # WhatsApp session data
+├── data/                    # JSON data storage (auto-created)
+├── server.js                # Main Express server & Logic
+└── README.md                # Project documentation
 ```
 
 ---
@@ -105,137 +120,60 @@ whatsapp-qr-bill/
 ## 🚀 Getting Started
 
 ### Prerequisites
-
-- **Node.js** `v18+` — [Download here](https://nodejs.org/)
-- **Google Chrome / Chromium** — Required by Puppeteer (used internally by `whatsapp-web.js`)
-- A **WhatsApp account** to link via QR code
+- **Node.js** `v18+`
+- **WhatsApp Account** (on your phone)
 
 ### Installation
 
 1. **Clone the repository**
-
    ```bash
    git clone https://github.com/your-username/whatsapp-qr-bill.git
    cd whatsapp-qr-bill
    ```
 
 2. **Install dependencies**
-
    ```bash
    npm install
    ```
 
-### Running the Application
+3. **Start the server**
+   ```bash
+   node server.js
+   ```
 
-```bash
-node server.js
-```
-
-The server will start on **[http://localhost:5000](http://localhost:5000)**.
-
-Open the URL in your browser to access the dashboard.
-
----
-
-## 💡 Usage
-
-### 1. Connect WhatsApp
-1. Navigate to the **WhatsApp** page from the landing screen
-2. Wait for the QR code to appear
-3. Open **WhatsApp** on your phone → **Linked Devices** → **Link a Device**
-4. Scan the QR code displayed on screen
-5. Once connected, the status badge will turn **🟢 Connected**
-
-### 2. Generate a Bill
-1. Navigate to the **Bill Generator** page
-2. Enter the **Customer Name** and **Phone Number**
-3. Add line items with **Name**, **Quantity**, and **Price**
-4. Click **🧾 Generate Invoice**
-5. Preview the generated invoice on the right panel
-
-### 3. Share via WhatsApp
-1. After generating an invoice, click **📤 Share as PDF via WhatsApp**
-2. A professional PDF will be generated in-memory and sent to the customer's WhatsApp
-3. The customer receives the PDF with a formatted caption including the total amount
+4. **Access the App**
+   Open **[http://localhost:5000](http://localhost:5000)** in your browser.
 
 ---
 
 ## 📡 API Reference
 
-### WhatsApp
+The application provides a robust REST API for integration.
 
-| Method | Endpoint       | Description                              |
-| ------ | -------------- | ---------------------------------------- |
-| `GET`  | `/qr`          | Get QR code data, connection status      |
-| `POST` | `/send`        | Send a text message to a phone number    |
-| `POST` | `/disconnect`  | Manually disconnect & reset the session  |
+### Authentication Headers
+Most API endpoints require an API Key.
+- Header: `X-API-Key: your_api_key`
+- Query Param: `?api_key=your_api_key`
 
-### Bills
+### Core Endpoints
 
-| Method | Endpoint       | Description                              |
-| ------ | -------------- | ---------------------------------------- |
-| `GET`  | `/bills`       | Retrieve all generated invoices          |
-| `POST` | `/bills`       | Create a new invoice                     |
-| `POST` | `/send-bill`   | Send an invoice as PDF via WhatsApp      |
+| Method | Endpoint | Description |
+| :--- | :--- | :--- |
+| `POST` | `/auth/send-otp` | Send login OTP via WhatsApp |
+| `POST` | `/auth/verify-otp` | Verify OTP and create session |
+| `GET` | `/qr` | Get WhatsApp Auth QR code |
+| `POST` | `/disconnect` | Disconnect WhatsApp session |
+| `POST` | `/api/v1/send-message` | Send text message (Requires API Key) |
+| `POST` | `/api/v1/send-invoice` | Send invoice PDF (Requires API Key) |
+| `GET` | `/api/v1/invoices/:id/pdf` | Download invoice PDF |
 
-### Health
-
-| Method | Endpoint       | Description                              |
-| ------ | -------------- | ---------------------------------------- |
-| `GET`  | `/health`      | Server & WhatsApp status check           |
-
-#### Example — Create a Bill
-
-```bash
-curl -X POST http://localhost:5000/bills \
-  -H "Content-Type: application/json" \
-  -d '{
-    "customerName": "Rajesh Kumar",
-    "customerPhone": "9876543210",
-    "items": [
-      { "name": "Rice 5kg", "qty": 2, "price": 350 },
-      { "name": "Sugar 1kg", "qty": 1, "price": 45 }
-    ]
-  }'
-```
-
-#### Example — Send Invoice PDF
-
-```bash
-curl -X POST http://localhost:5000/send-bill \
-  -H "Content-Type: application/json" \
-  -d '{ "invoiceNumber": "INV-260211-042" }'
-```
-
----
-
-## ⚙️ Configuration
-
-| Constant               | Default   | Description                                      |
-| ---------------------- | --------- | ------------------------------------------------ |
-| `MAX_RECONNECT_DELAY`  | `30000`   | Maximum delay (ms) between reconnection attempts |
-| `BASE_RECONNECT_DELAY` | `5000`    | Base delay (ms), doubles on each attempt         |
-| Server Port            | `5000`    | Express server listening port                    |
-
-> These values can be modified directly in `server.js`.
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome! Here's how you can help:
-
-1. **Fork** the repository
-2. **Create** a feature branch (`git checkout -b feature/amazing-feature`)
-3. **Commit** your changes (`git commit -m 'Add amazing feature'`)
-4. **Push** to the branch (`git push origin feature/amazing-feature`)
-5. **Open** a Pull Request
+For full documentation, visit **[http://localhost:5000/api/docs](http://localhost:5000/api/docs)**.
 
 ---
 
 ## 📄 License
 
-This project is licensed under the **ISC License**. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the **ISC License**.
 
 ---
 

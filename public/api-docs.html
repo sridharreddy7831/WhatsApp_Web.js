@@ -1,0 +1,1232 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Documentation — WhatsApp QR Bill</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0e17;
+            --surface: #111827;
+            --surface2: #1a2332;
+            --border: #1e293b;
+            --text: #e2e8f0;
+            --text2: #94a3b8;
+            --accent: #f97316;
+            --accent2: #fb923c;
+            --green: #22c55e;
+            --blue: #3b82f6;
+            --red: #ef4444;
+            --yellow: #eab308;
+            --purple: #a855f7;
+            --cyan: #06b6d4;
+            --get: #22c55e;
+            --post: #3b82f6;
+            --delete: #ef4444;
+            --radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+            border-bottom: 1px solid var(--border);
+            padding: 40px 0 36px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--purple), var(--cyan), var(--accent));
+        }
+
+        .header h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff 0%, var(--accent2) 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: var(--text2);
+            font-size: 1.05rem;
+        }
+
+        .header .version {
+            display: inline-block;
+            background: var(--accent);
+            color: #000;
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-top: 10px;
+        }
+
+        .header .base-url {
+            font-family: 'JetBrains Mono', monospace;
+            background: rgba(255, 255, 255, 0.08);
+            padding: 8px 20px;
+            border-radius: 8px;
+            display: inline-block;
+            margin-top: 14px;
+            color: var(--cyan);
+            font-size: 0.9rem;
+        }
+
+        /* ===== LAYOUT ===== */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 30px 20px 60px;
+        }
+
+        /* ===== AUTH SECTION ===== */
+        .auth-box {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 28px;
+            margin-bottom: 30px;
+        }
+
+        .auth-box h2 {
+            font-size: 1.3rem;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .auth-box h2 .icon {
+            font-size: 1.5rem;
+        }
+
+        .auth-box p {
+            color: var(--text2);
+            margin-bottom: 16px;
+        }
+
+        .auth-box code {
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--surface2);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            color: var(--accent2);
+        }
+
+        .try-it {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 16px;
+        }
+
+        .try-it label {
+            font-size: 0.85rem;
+            color: var(--text2);
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .try-it .input-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .try-it input {
+            flex: 1;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 10px 14px;
+            color: var(--text);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            outline: none;
+        }
+
+        .try-it input:focus {
+            border-color: var(--accent);
+        }
+
+        .try-it button {
+            background: var(--accent);
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.85rem;
+            white-space: nowrap;
+        }
+
+        .try-it button:hover {
+            background: var(--accent2);
+        }
+
+        /* ===== ADMIN SECTION ===== */
+        .admin-section {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.08), rgba(6, 182, 212, 0.08));
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: var(--radius);
+            padding: 24px;
+            margin-bottom: 30px;
+        }
+
+        .admin-section h3 {
+            color: var(--purple);
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+        }
+
+        .admin-section .key-display {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px 16px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--green);
+            word-break: break-all;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .admin-section .btn-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .admin-section input {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 9px 14px;
+            color: var(--text);
+            font-size: 0.85rem;
+            outline: none;
+            width: 220px;
+        }
+
+        .admin-section input:focus {
+            border-color: var(--purple);
+        }
+
+        .btn-gen {
+            background: var(--purple);
+            color: #fff;
+            border: none;
+            padding: 9px 18px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+
+        .btn-gen:hover {
+            opacity: 0.9;
+        }
+
+        /* ===== ENDPOINT SECTIONS ===== */
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin: 36px 0 16px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title .emoji {
+            font-size: 1.3rem;
+        }
+
+        .endpoint {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            margin-bottom: 14px;
+            overflow: hidden;
+            transition: border-color 0.2s;
+        }
+
+        .endpoint:hover {
+            border-color: rgba(249, 115, 22, 0.3);
+        }
+
+        .endpoint-header {
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .method {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            font-size: 0.75rem;
+            padding: 4px 10px;
+            border-radius: 6px;
+            min-width: 60px;
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        .method.get {
+            background: rgba(34, 197, 94, 0.15);
+            color: var(--get);
+        }
+
+        .method.post {
+            background: rgba(59, 130, 246, 0.15);
+            color: var(--post);
+        }
+
+        .method.delete {
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--delete);
+        }
+
+        .endpoint-path {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: var(--text);
+            flex: 1;
+        }
+
+        .endpoint-desc {
+            color: var(--text2);
+            font-size: 0.85rem;
+        }
+
+        .endpoint-arrow {
+            color: var(--text2);
+            font-size: 1.2rem;
+            transition: transform 0.2s;
+        }
+
+        .endpoint.open .endpoint-arrow {
+            transform: rotate(90deg);
+        }
+
+        .endpoint-body {
+            display: none;
+            padding: 0 20px 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        .endpoint.open .endpoint-body {
+            display: block;
+        }
+
+        .endpoint-body h4 {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text2);
+            margin: 16px 0 8px;
+        }
+
+        .param-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+
+        .param-table th {
+            text-align: left;
+            padding: 8px 12px;
+            background: var(--surface2);
+            color: var(--text2);
+            font-weight: 600;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+        }
+
+        .param-table td {
+            padding: 8px 12px;
+            border-top: 1px solid var(--border);
+        }
+
+        .param-table .param-name {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--cyan);
+        }
+
+        .param-table .required {
+            color: var(--red);
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        pre.code-block {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 14px 16px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            overflow-x: auto;
+            line-height: 1.5;
+            color: var(--text2);
+        }
+
+        pre.code-block .key {
+            color: var(--cyan);
+        }
+
+        pre.code-block .str {
+            color: var(--green);
+        }
+
+        pre.code-block .num {
+            color: var(--accent2);
+        }
+
+        pre.code-block .bool {
+            color: var(--purple);
+        }
+
+        /* ===== TRY IT ===== */
+        .try-endpoint {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 14px;
+            margin-top: 14px;
+        }
+
+        .try-endpoint button {
+            background: var(--accent);
+            color: #000;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .try-endpoint button:hover {
+            background: var(--accent2);
+        }
+
+        .try-result {
+            margin-top: 10px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            max-height: 300px;
+            overflow: auto;
+            display: none;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            text-align: center;
+            padding: 30px 0;
+            color: var(--text2);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--border);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.6rem;
+            }
+
+            .endpoint-desc {
+                display: none;
+            }
+
+            .admin-section .btn-row {
+                flex-direction: column;
+            }
+
+            .admin-section input {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <div class="header">
+        <h1>WhatsApp QR Bill API</h1>
+        <p>Invoice generation, WhatsApp messaging, and payment QR codes</p>
+        <div class="version">v1.0</div>
+        <div>
+            <div class="base-url">Base URL: http://localhost:5000/api/v1</div>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <!-- AUTHENTICATION -->
+        <div class="auth-box">
+            <h2><span class="icon">🔐</span> Authentication</h2>
+            <p>All API endpoints require an API key. Include it in every request using one of these methods:</p>
+            <p><strong>Header (recommended):</strong> <code>X-API-Key: your_api_key_here</code></p>
+            <p><strong>Query parameter:</strong> <code>?api_key=your_api_key_here</code></p>
+            <p style="margin-bottom:0">Rate limit: <strong>100 requests/hour</strong> per key. Rate limit headers are
+                included in every response.</p>
+
+            <div class="try-it">
+                <label>Enter your API key to test endpoints below:</label>
+                <div class="input-row">
+                    <input type="text" id="globalApiKey" placeholder="nxr_live_..." autocomplete="off">
+                    <button onclick="testApiKey()">Verify Key</button>
+                </div>
+                <div id="keyStatus" style="margin-top:8px;font-size:0.85rem;display:none"></div>
+            </div>
+        </div>
+
+        <!-- ADMIN: Generate Key -->
+        <div class="admin-section">
+            <h3>⚡ Quick Start — Generate an API Key</h3>
+            <p style="color:var(--text2);font-size:0.9rem;margin-bottom:8px">Generate a new API key to get started.
+                Admin endpoints are only accessible from localhost.</p>
+            <div class="btn-row">
+                <input type="text" id="keyName" placeholder="App name (e.g. My POS)">
+                <button class="btn-gen" onclick="generateKey()">Generate Key</button>
+            </div>
+            <div id="generatedKey" class="key-display"></div>
+        </div>
+
+        <!-- ===== ENDPOINTS ===== -->
+
+        <!-- GENERAL -->
+        <div class="section-title"><span class="emoji">📡</span> General</div>
+
+        <div class="endpoint" id="ep-health">
+            <div class="endpoint-header" onclick="toggleEndpoint('ep-health')">
+                <span class="method get">GET</span>
+                <span class="endpoint-path">/api/v1/health</span>
+                <span class="endpoint-desc">Server & WhatsApp status with rate limit info</span>
+                <span class="endpoint-arrow">›</span>
+            </div>
+            <div class="endpoint-body">
+                <h4>Response</h4>
+                <pre class="code-block">{
+  <span class="key">"status"</span>: <span class="str">"ok"</span>,
+  <span class="key">"server"</span>: <span class="str">"running"</span>,
+  <span class="key">"whatsapp"</span>: <span class="str">"connected"</span>,
+  <span class="key">"ready"</span>: <span class="bool">true</span>,
+  <span class="key">"apiKey"</span>: <span class="str">"My App"</span>,
+  <span class="key">"rateLimit"</span>: { <span class="key">"limit"</span>: <span class="num">100</span>, <span class="key">"remaining"</span>: <span class="num">98</span> }
+}</pre>
+                <div class="try-endpoint">
+                    <button onclick="tryEndpoint('GET','/api/v1/health','ep-health')">▶ Try it</button>
+                    <div class="try-result" id="result-ep-health"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="endpoint" id="ep-status">
+            <div class="endpoint-header" onclick="toggleEndpoint('ep-status')">
+                <span class="method get">GET</span>
+                <span class="endpoint-path">/api/v1/status</span>
+                <span class="endpoint-desc">WhatsApp connection details</span>
+                <span class="endpoint-arrow">›</span>
+            </div>
+            <div class="endpoint-body">
+                <h4>Response</h4>
+                <pre class="code-block">{
+  <span class="key">"whatsapp"</span>: {
+    <span class="key">"connected"</span>: <span class="bool">true</span>,
+    <span class="key">"status"</span>: <span class="str">"connected"</span>,
+    <span class="key">"qrAvailable"</span>: <span class="bool">false</span>
+  }
+}</pre>
+                <div class="try-endpoint">
+                    <button onclick="tryEndpoint('GET','/api/v1/status','ep-status')">▶ Try it</button>
+                    <div class="try-result" id="result-ep-status"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- INVOICES -->
+        <div class="section-title"><span class="emoji">📄</span> Invoices</div>
+
+        <div class="endpoint" id="ep-create-inv">
+            <div class="endpoint-header" onclick="toggleEndpoint('ep-create-inv')">
+                <span class="method post">POST</span>
+                <span class="endpoint-path">/api/v1/invoices</span>
+                <span class="endpoint-desc">Create a new GST Invoice</span>
+                <span class="endpoint-arrow">›</span>
+            </div>
+            <div class="endpoint-body">
+                <h4>Request Body (JSON)</h4>
+                <table class="param-table">
+                    <thead>
+                        <tr>
+                            <th>Field</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="param-name">customerName <span class="required">required</span></td>
+                            <td>string</td>
+                            <td>Customer's full name</td>
+                        </tr>
+                        <tr>
+                            <td class="param-name">customerPhone <span class="required">required</span></td>
+                            <td>string</td>
+                            <td>10-digit phone number</td>
+                        </tr>
+                        <tr>
+                            <td class="param-name">items[] <span class="required">required</span></td>
+                            <td>array</td>
+                            <td>Array of line items</td>
+                        </tr>
+                        <tr>
+                            <td class="param-name">items[].name <span class="required">required</span></td>
+                            <td>string</td>
+                            <td>Item name</td>
+                        </tr>
+                        <tr>
+                            <td class="param-name">items[].qty <span class="required">required</span></td>
+                            <td>number</td>
+                            <td>Quantity</td>
+                        </tr>
+                        <tr>
+                            <td class="param-name">items[].price <span class="required">required</span></td>
+                            <td>number</td>
+                            <td>Unit price</td>
+                        </tr>
+                        <tr>
+                            <td class="param-name">items[].gstPercent</td>
+                            <td>number</td>
+                            <td>GST % (e.g. 18)</td>
+                        </tr>
+                        <tr>
+                            <td class="param-name">items[].hsnSac</td>
+                            <td>string</td>
+                            <td>HSN/SAC code</td>
+                        </tr>
+                        <tr>
+                            <td class="param-name">items[].uom</td>
+                            <td>string</td>
+                            <td>Unit of measure (KG, NOS, etc.)</td>
+                        </tr>
+                        <tr>
+                            <td class="param-name">paymentMode</td>
+                            <td>string</td>
+                            <td>Cash, Card, UPI, Bank Transfer</td>
+                        </tr>
+                        <tr>
+                            <td class="param-name">billTo</td>
+                            <td>object</td>
+                            <td>Billing address (name, address, phone, email, gstin)</td>
+                        </tr>
+                        <tr>
+                            <td class="param-name">shipTo</td>
+                            <td>object</td>
+                            <td>Shipping address (name, address)</td>
+                        </tr>
+                        <tr>
+                            <td class="param-name">dueDate</td>
+                            <td>string</td>
+                            <td>Payment due date (YYYY-MM-DD)</td>
+                        </tr>
+                        <tr>
+                            <td class="param-name">placeOfSupply</td>
+                            <td>string</td>
+                            <td>State/city of supply</td>
+                        </tr>
+                        <tr>
+                            <td class="param-name">notes</td>
+                            <td>string</td>
+                            <td>Additional notes</td>
+                        </tr>
+                        <tr>
+                            <td class="param-name">template</td>
+                            <td>string</td>
+                            <td>"gst" or "simple"</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <h4>Example Request</h4>
+                <pre class="code-block">{
+  <span class="key">"customerName"</span>: <span class="str">"John Doe"</span>,
+  <span class="key">"customerPhone"</span>: <span class="str">"9876543210"</span>,
+  <span class="key">"items"</span>: [
+    { <span class="key">"name"</span>: <span class="str">"Basmati Rice 5kg"</span>, <span class="key">"qty"</span>: <span class="num">2</span>, <span class="key">"price"</span>: <span class="num">1750</span>, <span class="key">"gstPercent"</span>: <span class="num">5</span>, <span class="key">"hsnSac"</span>: <span class="str">"1006"</span>, <span class="key">"uom"</span>: <span class="str">"KG"</span> }
+  ],
+  <span class="key">"paymentMode"</span>: <span class="str">"UPI"</span>,
+  <span class="key">"dueDate"</span>: <span class="str">"2026-03-01"</span>
+}</pre>
+                <h4>Response</h4>
+                <pre class="code-block">{
+  <span class="key">"success"</span>: <span class="bool">true</span>,
+  <span class="key">"invoice"</span>: {
+    <span class="key">"invoiceNumber"</span>: <span class="str">"INV-260213-027"</span>,
+    <span class="key">"grandTotal"</span>: <span class="num">3675</span>,
+    <span class="key">"amountInWords"</span>: <span class="str">"Three Thousand Six Hundred Seventy Five"</span>,
+    ...
+  }
+}</pre>
+            </div>
+        </div>
+
+        <div class="endpoint" id="ep-list-inv">
+            <div class="endpoint-header" onclick="toggleEndpoint('ep-list-inv')">
+                <span class="method get">GET</span>
+                <span class="endpoint-path">/api/v1/invoices</span>
+                <span class="endpoint-desc">List invoices with pagination</span>
+                <span class="endpoint-arrow">›</span>
+            </div>
+            <div class="endpoint-body">
+                <h4>Query Parameters</h4>
+                <table class="param-table">
+                    <thead>
+                        <tr>
+                            <th>Param</th>
+                            <th>Type</th>
+                            <th>Default</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="param-name">page</td>
+                            <td>integer</td>
+                            <td>1</td>
+                            <td>Page number</td>
+                        </tr>
+                        <tr>
+                            <td class="param-name">limit</td>
+                            <td>integer</td>
+                            <td>20</td>
+                            <td>Items per page (max 100)</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="try-endpoint">
+                    <button onclick="tryEndpoint('GET','/api/v1/invoices?page=1&limit=5','ep-list-inv')">▶ Try
+                        it</button>
+                    <div class="try-result" id="result-ep-list-inv"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="endpoint" id="ep-get-inv">
+            <div class="endpoint-header" onclick="toggleEndpoint('ep-get-inv')">
+                <span class="method get">GET</span>
+                <span class="endpoint-path">/api/v1/invoices/:id</span>
+                <span class="endpoint-desc">Get a single invoice by number</span>
+                <span class="endpoint-arrow">›</span>
+            </div>
+            <div class="endpoint-body">
+                <h4>Path Parameters</h4>
+                <table class="param-table">
+                    <thead>
+                        <tr>
+                            <th>Param</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="param-name">id <span class="required">required</span></td>
+                            <td>string</td>
+                            <td>Invoice number (e.g. INV-260213-027)</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="try-endpoint">
+                    <button
+                        onclick="tryEndpointPrompt('GET','/api/v1/invoices/','ep-get-inv','Enter invoice number:')">▶
+                        Try it</button>
+                    <div class="try-result" id="result-ep-get-inv"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="endpoint" id="ep-pdf">
+            <div class="endpoint-header" onclick="toggleEndpoint('ep-pdf')">
+                <span class="method get">GET</span>
+                <span class="endpoint-path">/api/v1/invoices/:id/pdf</span>
+                <span class="endpoint-desc">Download invoice as PDF</span>
+                <span class="endpoint-arrow">›</span>
+            </div>
+            <div class="endpoint-body">
+                <h4>Path Parameters</h4>
+                <table class="param-table">
+                    <thead>
+                        <tr>
+                            <th>Param</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="param-name">id <span class="required">required</span></td>
+                            <td>string</td>
+                            <td>Invoice number</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <h4>Query Parameters</h4>
+                <table class="param-table">
+                    <thead>
+                        <tr>
+                            <th>Param</th>
+                            <th>Type</th>
+                            <th>Default</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="param-name">format</td>
+                            <td>string</td>
+                            <td>a4</td>
+                            <td>"a4" or "thermal"</td>
+                        </tr>
+                        <tr>
+                            <td class="param-name">template</td>
+                            <td>string</td>
+                            <td>gst</td>
+                            <td>"gst" or "simple"</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p style="color:var(--text2);font-size:0.85rem;margin-top:12px">Returns <code>application/pdf</code>
+                    binary. Use the browser or a PDF viewer to display.</p>
+            </div>
+        </div>
+
+        <!-- WHATSAPP -->
+        <div class="section-title"><span class="emoji">💬</span> WhatsApp Messaging</div>
+
+        <div class="endpoint" id="ep-send-msg">
+            <div class="endpoint-header" onclick="toggleEndpoint('ep-send-msg')">
+                <span class="method post">POST</span>
+                <span class="endpoint-path">/api/v1/send-message</span>
+                <span class="endpoint-desc">Send a text message via WhatsApp</span>
+                <span class="endpoint-arrow">›</span>
+            </div>
+            <div class="endpoint-body">
+                <h4>Request Body (JSON)</h4>
+                <table class="param-table">
+                    <thead>
+                        <tr>
+                            <th>Field</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="param-name">phone <span class="required">required</span></td>
+                            <td>string</td>
+                            <td>Phone number (10 digits, 91 prefix auto-added)</td>
+                        </tr>
+                        <tr>
+                            <td class="param-name">message <span class="required">required</span></td>
+                            <td>string</td>
+                            <td>Message text to send</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <h4>Example Request</h4>
+                <pre class="code-block">{
+  <span class="key">"phone"</span>: <span class="str">"9876543210"</span>,
+  <span class="key">"message"</span>: <span class="str">"Hello from the API!"</span>
+}</pre>
+                <h4>Response</h4>
+                <pre
+                    class="code-block">{ <span class="key">"success"</span>: <span class="bool">true</span>, <span class="key">"phone"</span>: <span class="str">"9876543210"</span>, <span class="key">"messageSent"</span>: <span class="bool">true</span> }</pre>
+            </div>
+        </div>
+
+        <div class="endpoint" id="ep-send-inv">
+            <div class="endpoint-header" onclick="toggleEndpoint('ep-send-inv')">
+                <span class="method post">POST</span>
+                <span class="endpoint-path">/api/v1/send-invoice</span>
+                <span class="endpoint-desc">Send invoice PDF to customer's WhatsApp</span>
+                <span class="endpoint-arrow">›</span>
+            </div>
+            <div class="endpoint-body">
+                <h4>Request Body (JSON)</h4>
+                <table class="param-table">
+                    <thead>
+                        <tr>
+                            <th>Field</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="param-name">invoiceNumber <span class="required">required</span></td>
+                            <td>string</td>
+                            <td>Invoice number to send</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <h4>Response</h4>
+                <pre
+                    class="code-block">{ <span class="key">"success"</span>: <span class="bool">true</span>, <span class="key">"invoiceNumber"</span>: <span class="str">"INV-260213-027"</span>, <span class="key">"sentTo"</span>: <span class="str">"9876543210"</span> }</pre>
+            </div>
+        </div>
+
+        <!-- SHOP SETTINGS -->
+        <div class="section-title"><span class="emoji">🏪</span> Shop Settings</div>
+
+        <div class="endpoint" id="ep-get-shop">
+            <div class="endpoint-header" onclick="toggleEndpoint('ep-get-shop')">
+                <span class="method get">GET</span>
+                <span class="endpoint-path">/api/v1/shop-settings</span>
+                <span class="endpoint-desc">Get shop configuration</span>
+                <span class="endpoint-arrow">›</span>
+            </div>
+            <div class="endpoint-body">
+                <h4>Response</h4>
+                <pre class="code-block">{
+  <span class="key">"settings"</span>: {
+    <span class="key">"shopName"</span>: <span class="str">"Test Shop"</span>,
+    <span class="key">"address"</span>: <span class="str">"123 Main St"</span>,
+    <span class="key">"gstNumber"</span>: <span class="str">"36ABCDE1234F1Z5"</span>,
+    <span class="key">"phone"</span>: <span class="str">"9876543210"</span>,
+    <span class="key">"email"</span>: <span class="str">"shop@test.com"</span>,
+    <span class="key">"upiId"</span>: <span class="str">"shop@upi"</span>,
+    ...
+  },
+  <span class="key">"hasLogo"</span>: <span class="bool">true</span>
+}</pre>
+                <div class="try-endpoint">
+                    <button onclick="tryEndpoint('GET','/api/v1/shop-settings','ep-get-shop')">▶ Try it</button>
+                    <div class="try-result" id="result-ep-get-shop"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="endpoint" id="ep-set-shop">
+            <div class="endpoint-header" onclick="toggleEndpoint('ep-set-shop')">
+                <span class="method post">POST</span>
+                <span class="endpoint-path">/api/v1/shop-settings</span>
+                <span class="endpoint-desc">Update shop configuration</span>
+                <span class="endpoint-arrow">›</span>
+            </div>
+            <div class="endpoint-body">
+                <h4>Request Body (JSON)</h4>
+                <table class="param-table">
+                    <thead>
+                        <tr>
+                            <th>Field</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="param-name">shopName</td>
+                            <td>string</td>
+                            <td>Shop display name</td>
+                        </tr>
+                        <tr>
+                            <td class="param-name">address</td>
+                            <td>string</td>
+                            <td>Full address</td>
+                        </tr>
+                        <tr>
+                            <td class="param-name">gstNumber</td>
+                            <td>string</td>
+                            <td>GSTIN</td>
+                        </tr>
+                        <tr>
+                            <td class="param-name">phone</td>
+                            <td>string</td>
+                            <td>Contact phone</td>
+                        </tr>
+                        <tr>
+                            <td class="param-name">email</td>
+                            <td>string</td>
+                            <td>Contact email</td>
+                        </tr>
+                        <tr>
+                            <td class="param-name">upiId</td>
+                            <td>string</td>
+                            <td>UPI payment ID</td>
+                        </tr>
+                        <tr>
+                            <td class="param-name">bankDetails</td>
+                            <td>object</td>
+                            <td>Bank account info</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p style="color:var(--text2);font-size:0.85rem;margin-top:12px">Only include fields you want to update.
+                    Others will retain existing values.</p>
+            </div>
+        </div>
+
+        <!-- PAYMENTS -->
+        <div class="section-title"><span class="emoji">💳</span> Payments</div>
+
+        <div class="endpoint" id="ep-gen-qr">
+            <div class="endpoint-header" onclick="toggleEndpoint('ep-gen-qr')">
+                <span class="method post">POST</span>
+                <span class="endpoint-path">/api/v1/generate-qr</span>
+                <span class="endpoint-desc">Generate UPI payment QR code</span>
+                <span class="endpoint-arrow">›</span>
+            </div>
+            <div class="endpoint-body">
+                <h4>Request Body (JSON)</h4>
+                <table class="param-table">
+                    <thead>
+                        <tr>
+                            <th>Field</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="param-name">upiId <span class="required">required</span></td>
+                            <td>string</td>
+                            <td>UPI ID (e.g. shop@paytm)</td>
+                        </tr>
+                        <tr>
+                            <td class="param-name">name</td>
+                            <td>string</td>
+                            <td>Payee name</td>
+                        </tr>
+                        <tr>
+                            <td class="param-name">amount</td>
+                            <td>number</td>
+                            <td>Amount to pay</td>
+                        </tr>
+                        <tr>
+                            <td class="param-name">note</td>
+                            <td>string</td>
+                            <td>Payment note</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <h4>Response</h4>
+                <pre class="code-block">{
+  <span class="key">"success"</span>: <span class="bool">true</span>,
+  <span class="key">"qrDataUrl"</span>: <span class="str">"data:image/png;base64,..."</span>,
+  <span class="key">"upiString"</span>: <span class="str">"upi://pay?pa=shop@paytm&am=100&cu=INR"</span>
+}</pre>
+            </div>
+        </div>
+
+        <!-- ERROR CODES -->
+        <div class="section-title"><span class="emoji">⚠️</span> Error Codes</div>
+        <div class="auth-box">
+            <table class="param-table">
+                <thead>
+                    <tr>
+                        <th>Status</th>
+                        <th>Error</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span style="color:var(--yellow)">400</span></td>
+                        <td>Bad Request</td>
+                        <td>Missing or invalid parameters</td>
+                    </tr>
+                    <tr>
+                        <td><span style="color:var(--red)">401</span></td>
+                        <td>Unauthorized</td>
+                        <td>Missing or invalid API key</td>
+                    </tr>
+                    <tr>
+                        <td><span style="color:var(--red)">403</span></td>
+                        <td>Forbidden</td>
+                        <td>API key has been revoked</td>
+                    </tr>
+                    <tr>
+                        <td><span style="color:var(--yellow)">404</span></td>
+                        <td>Not Found</td>
+                        <td>Invoice or resource not found</td>
+                    </tr>
+                    <tr>
+                        <td><span style="color:var(--accent)">429</span></td>
+                        <td>Too Many Requests</td>
+                        <td>Rate limit exceeded (check X-RateLimit-* headers)</td>
+                    </tr>
+                    <tr>
+                        <td><span style="color:var(--cyan)">503</span></td>
+                        <td>Service Unavailable</td>
+                        <td>WhatsApp not connected</td>
+                    </tr>
+                    <tr>
+                        <td><span style="color:var(--red)">500</span></td>
+                        <td>Server Error</td>
+                        <td>Internal error</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- cURL EXAMPLES -->
+        <div class="section-title"><span class="emoji">🔧</span> cURL Examples</div>
+        <div class="auth-box">
+            <h4 style="color:var(--text2);margin-bottom:10px">Create Invoice</h4>
+            <pre class="code-block">curl -X POST http://localhost:5000/api/v1/invoices \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -d '{
+    "customerName": "John Doe",
+    "customerPhone": "9876543210",
+    "items": [{"name": "Widget", "qty": 5, "price": 200, "gstPercent": 18}]
+  }'</pre>
+
+            <h4 style="color:var(--text2);margin:16px 0 10px">Download PDF</h4>
+            <pre class="code-block">curl -H "X-API-Key: YOUR_API_KEY" \
+  "http://localhost:5000/api/v1/invoices/INV-260213-027/pdf" \
+  --output invoice.pdf</pre>
+
+            <h4 style="color:var(--text2);margin:16px 0 10px">Send WhatsApp Message</h4>
+            <pre class="code-block">curl -X POST http://localhost:5000/api/v1/send-message \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -d '{"phone": "9876543210", "message": "Hello from API!"}'</pre>
+        </div>
+
+        <div class="footer">
+            WhatsApp QR Bill API v1.0 — Built with ❤️
+        </div>
+    </div>
+
+    <script>
+        // Toggle endpoint accordion
+        function toggleEndpoint(id) {
+            document.getElementById(id).classList.toggle('open');
+        }
+
+        // Get stored API key
+        function getApiKey() {
+            return document.getElementById('globalApiKey').value.trim();
+        }
+
+        // Verify API key
+        async function testApiKey() {
+            const key = getApiKey();
+            const st = document.getElementById('keyStatus');
+            if (!key) { st.style.display = 'block'; st.style.color = 'var(--red)'; st.textContent = 'Please enter an API key'; return; }
+            try {
+                const r = await fetch('/api/v1/health', { headers: { 'X-API-Key': key } });
+                const d = await r.json();
+                st.style.display = 'block';
+                if (r.ok) {
+                    st.style.color = 'var(--green)';
+                    st.textContent = `✅ Valid! App: "${d.apiKey}" | Remaining: ${d.rateLimit?.remaining}/${d.rateLimit?.limit} req/hr`;
+                } else {
+                    st.style.color = 'var(--red)';
+                    st.textContent = `❌ ${d.error || 'Invalid key'}`;
+                }
+            } catch (e) {
+                st.style.display = 'block'; st.style.color = 'var(--red)'; st.textContent = 'Connection error';
+            }
+        }
+
+        // Generate API key (admin)
+        async function generateKey() {
+            const name = document.getElementById('keyName').value.trim() || 'My App';
+            try {
+                const r = await fetch('/api/admin/keys', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name })
+                });
+                const d = await r.json();
+                const el = document.getElementById('generatedKey');
+                if (d.success) {
+                    el.style.display = 'block';
+                    el.innerHTML = `<strong>Your API Key (save this!):</strong><br>${d.apiKey.key}<br><br><span style="color:var(--text2);font-size:0.8rem">Name: ${d.apiKey.name} | Rate limit: ${d.apiKey.rateLimit}/hr</span>`;
+                    document.getElementById('globalApiKey').value = d.apiKey.key;
+                } else {
+                    el.style.display = 'block';
+                    el.style.color = 'var(--red)';
+                    el.textContent = d.error || 'Failed';
+                }
+            } catch (e) {
+                alert('Error generating key: ' + e.message);
+            }
+        }
+
+        // Try endpoint
+        async function tryEndpoint(method, url, id) {
+            const key = getApiKey();
+            const el = document.getElementById('result-' + id);
+            if (!key) { el.style.display = 'block'; el.style.color = 'var(--red)'; el.textContent = 'Enter your API key above first'; return; }
+            el.style.display = 'block'; el.style.color = 'var(--text2)'; el.textContent = 'Loading...';
+            try {
+                const r = await fetch(url, { method, headers: { 'X-API-Key': key } });
+                const d = await r.json();
+                el.style.color = r.ok ? 'var(--green)' : 'var(--red)';
+                el.textContent = JSON.stringify(d, null, 2);
+            } catch (e) {
+                el.style.color = 'var(--red)'; el.textContent = 'Error: ' + e.message;
+            }
+        }
+
+        // Try endpoint with prompt (for path params)
+        async function tryEndpointPrompt(method, baseUrl, id, promptText) {
+            const val = prompt(promptText);
+            if (!val) return;
+            tryEndpoint(method, baseUrl + val, id);
+        }
+    </script>
+
+</body>
+
+</html>

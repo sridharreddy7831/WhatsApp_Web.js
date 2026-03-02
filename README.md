@@ -2,6 +2,8 @@
 
 A highly concurrent, headless WhatsApp API microservice powered by `whatsapp-web.js` and Express.js. Designed to manage multiple completely isolated WhatsApp sessions from a single unified API Gateway.
 
+**Repository:** [https://github.com/Nexarats/WhatsApp_Web.js.git](https://github.com/Nexarats/WhatsApp_Web.js.git)
+
 ## 🌟 Single Endpoint Architecture (RPC Data-Driven)
 
 This API relies on a single **Unified URL**:

@@ -68,5 +68,11 @@ Simply upload the codebase, run `npm install`, and `npm run start` (`node server
 
 ---
 
+## 🌐 Live Deployment & Documentation
+- **Live API Endpoint:** [https://whatsapp-services-liart.vercel.app/](https://whatsapp-services-liart.vercel.app/)
+- **Interactive Documentation:** [https://whatsapp-services-liart.vercel.app/docs](https://whatsapp-services-liart.vercel.app/docs)
+
+---
+
 ## 📖 Interactive Documentation
-Visit `http://localhost:5000/docs` to see the full interactive documentation.
+Visit `http://localhost:5000/docs` to see the full interactive documentation locally.

@@ -4,17 +4,26 @@ A highly concurrent, headless WhatsApp API microservice powered by `whatsapp-web
 
 ## 🌟 Multi-Session Architecture
 
-By abstracting sessions into unique IDs mappings (e.g. `clientA`, `clientB`, `marketingTeam`, `supportTeam`), this microservice can run multiple WhatsApp accounts on a single container!
-Instead of globally hitting `/api/v2/whatsapp/send`, you now map requests to specific dynamic variables:
+By abstracting sessions into unique IDs mappings (e.g. `clientA`, `clientB`, `marketingTeam`, `supportTeam`), this microservice can run multiple WhatsApp accounts on a single container! 
+But it also fully supports operating as a **simple, default single-user instance** without needing to supply an ID!
 
-**Format:** `/api/v2/whatsapp/:sessionId/...`
+### 👤 Option A: Single-User Workflow (No Session ID)
 
-### 🔑 User Workflow (4+ Persons Concurrency)
+If you just need a standard WhatsApp bot for yourself, skip the `sessionId` param! The API automatically routes you to a background session called `default`.
 
-If 4 people need to use this without stepping on each other's toes, simply assign each person a `sessionId`:
-1. Use `POST /api/v2/whatsapp/personA/start`
-2. Wait 10 seconds, and get the QR via `GET /api/v2/whatsapp/personA/qr`
-3. Now the person is globally linked to the string "personA", completely isolated from "personB"!
+1. **Start Server:** `GET /api/v2/whatsapp/start`
+2. **Scan QR:** `GET /api/v2/whatsapp/qr`
+3. **Send Message:** `POST /api/v2/whatsapp/send` with `{ "phone": "123...", "message": "Hi" }`
+
+---
+
+### � Option B: Multi-User Workflow (4+ Persons Concurrency)
+
+If 4 people need to use this without stepping on each other's toes, simply slide a `:sessionId` variable into the URL paths:
+
+1. **Start Server (Person A):** `GET /api/v2/whatsapp/personA/start`
+2. **Scan QR (Person A):** `GET /api/v2/whatsapp/personA/qr`
+3. **Person B:** Person B can do the exact same thing independently using `/api/v2/whatsapp/personB/start`! They will never overlap.
 
 ---
 
@@ -53,13 +62,13 @@ Simply upload the codebase, run `npm install`, and `npm start` (`node server.js`
 
 ## ⚡ API Endpoints Quick Reference
 
-Every single endpoint must include a `:sessionId` variable mapping in the URL path. 
+You can either hit the root `/api/v2/whatsapp/...` (for default single-user), OR hit `/api/v2/whatsapp/:sessionId/...` (for isolated multi-user mode). 
 
-- **Start Client:** `POST /api/v2/whatsapp/:sessionId/start`
-- **Session Status:** `GET /api/v2/whatsapp/:sessionId/status`
-- **Get QR Code:** `GET /api/v2/whatsapp/:sessionId/qr`
-- **Request Pair Code:** `POST /api/v2/whatsapp/:sessionId/pair { "phone": "98765..." }`
-- **Send Msg:** `POST /api/v2/whatsapp/:sessionId/send { "phone": "...", "message": "Hi" }`
-- **Send Receipt (Base64 file):** `POST /api/v2/whatsapp/:sessionId/send-receipt`
-- **Fetch Chat History:** `GET /api/v2/whatsapp/:sessionId/messages?phone=919876543210&limit=50`
-- **Logout Client:** `POST /api/v2/whatsapp/:sessionId/logout`
+- **Start Client:** `GET /api/v2/whatsapp/start`  *(or `/whatsapp/:sessionId/start`)*
+- **Session Status:** `GET /api/v2/whatsapp/status`
+- **Get QR Code:** `GET /api/v2/whatsapp/qr`
+- **Request Pair Code:** `POST /api/v2/whatsapp/pair { "phone": "98765..." }`
+- **Send Msg:** `POST /api/v2/whatsapp/send { "phone": "...", "message": "Hi" }`
+- **Send Receipt (Base64 file):** `POST /api/v2/whatsapp/send-receipt`
+- **Fetch Chat History:** `GET /api/v2/whatsapp/messages?phone=919876543210&limit=50`
+- **Logout Client:** `POST /api/v2/whatsapp/logout`

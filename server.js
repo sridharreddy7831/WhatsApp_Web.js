@@ -13,7 +13,7 @@ app.use(bodyParser.json({ limit: "50mb" }));
 
 // Root health check
 app.get("/", (req, res) => {
-    res.json({ status: "Microservice running", info: "Use /api/v2/whatsapp/:sessionId/* for endpoints." });
+    res.json({ status: "Microservice running", info: "Use /api/v2/whatsapp/start to begin, or /api/v2/whatsapp/:sessionId/start for multi-user." });
 });
 
 app.get("/health", (req, res) => {
@@ -36,7 +36,10 @@ if (require.main === module) {
     const PORT = process.env.PORT || 5000;
     app.listen(PORT, () => {
         console.log(`\ud83d\ude80 Multi-Session WhatsApp API Microservice running on port ${PORT}`);
-        console.log(`Available Base Path: /api/v2/whatsapp/:sessionId/`);
-        console.log(`Use POST /api/v2/whatsapp/your-name/start to spin up a connection.\n`);
+        console.log(`🚀 Docs Available at: http://localhost:${PORT}/api/docs`);
+        console.log(`-----------------------------------------------------`);
+        console.log(`For Single User:   GET /api/v2/whatsapp/start`);
+        console.log(`For Multi-User:    GET /api/v2/whatsapp/your-name/start`);
+        console.log(`-----------------------------------------------------\n`);
     });
 }

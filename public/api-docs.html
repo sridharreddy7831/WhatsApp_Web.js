@@ -241,12 +241,15 @@
     </header>
 
     <div class="highlight-notice">
-        <strong>⚠️ Architecture Note:</strong> Every single route requires a dynamic <code>:sessionId</code> parameter
-        in the URL.
-        <br>For example, if "John" wants to use the service, he will call endpoints at
-        <code>/api/v2/whatsapp/john/...</code>.
-        If "Jane" connects, she uses <code>/api/v2/whatsapp/jane/...</code>. This isolates their data and QR
-        environments completely!
+        <strong>⚠️ Architecture Note:</strong>
+        <br><br>
+        <strong>For Single Users:</strong> You do NOT need a session ID! Simply call the root endpoints directly (e.g.,
+        <code>/api/v2/whatsapp/start</code>). The system will automatically link you to a default bot session.
+        <br><br>
+        <strong>For Multi-Tenant Usage:</strong> You can isolate different WhatsApp numbers parallelly by adding a
+        dynamic <code>:sessionId</code> parameter in the URL. For example, "John" can use
+        <code>/api/v2/whatsapp/john/start</code> and "Jane" can use <code>/api/v2/whatsapp/jane/start</code> to safely
+        isolate data sets simultaneously!
     </div>
 
     <div class="container">
@@ -255,7 +258,8 @@
         <div class="endpoint-card">
             <div class="endpoint-header">
                 <span class="method all">GET/POST</span>
-                <span class="path">/api/v2/whatsapp/<span class="param">:sessionId</span>/start</span>
+                <span class="path">/api/v2/whatsapp/<strong>[<span
+                            class="param">:sessionId</span>]</strong>/start</span>
             </div>
             <div class="endpoint-body">
                 <div class="description">
@@ -274,7 +278,8 @@
         <div class="endpoint-card">
             <div class="endpoint-header">
                 <span class="method get">GET</span>
-                <span class="path">/api/v2/whatsapp/<span class="param">:sessionId</span>/status</span>
+                <span class="path">/api/v2/whatsapp/<strong>[<span
+                            class="param">:sessionId</span>]</strong>/status</span>
             </div>
             <div class="endpoint-body">
                 <div class="description">
@@ -293,7 +298,7 @@
         <div class="endpoint-card">
             <div class="endpoint-header">
                 <span class="method get">GET</span>
-                <span class="path">/api/v2/whatsapp/<span class="param">:sessionId</span>/qr</span>
+                <span class="path">/api/v2/whatsapp/<strong>[<span class="param">:sessionId</span>]</strong>/qr</span>
             </div>
             <div class="endpoint-body">
                 <div class="description">
@@ -307,7 +312,7 @@
         <div class="endpoint-card">
             <div class="endpoint-header">
                 <span class="method post">POST</span>
-                <span class="path">/api/v2/whatsapp/<span class="param">:sessionId</span>/pair</span>
+                <span class="path">/api/v2/whatsapp/<strong>[<span class="param">:sessionId</span>]</strong>/pair</span>
             </div>
             <div class="endpoint-body">
                 <div class="description">
@@ -328,7 +333,7 @@
         <div class="endpoint-card">
             <div class="endpoint-header">
                 <span class="method post">POST</span>
-                <span class="path">/api/v2/whatsapp/<span class="param">:sessionId</span>/send</span>
+                <span class="path">/api/v2/whatsapp/<strong>[<span class="param">:sessionId</span>]</strong>/send</span>
             </div>
             <div class="endpoint-body">
                 <div class="description">
@@ -352,7 +357,8 @@
         <div class="endpoint-card">
             <div class="endpoint-header">
                 <span class="method post">POST</span>
-                <span class="path">/api/v2/whatsapp/<span class="param">:sessionId</span>/send-receipt</span>
+                <span class="path">/api/v2/whatsapp/<strong>[<span
+                            class="param">:sessionId</span>]</strong>/send-receipt</span>
             </div>
             <div class="endpoint-body">
                 <div class="description">
@@ -380,7 +386,8 @@
         <div class="endpoint-card">
             <div class="endpoint-header">
                 <span class="method post">POST</span>
-                <span class="path">/api/v2/whatsapp/<span class="param">:sessionId</span>/send-bulk</span>
+                <span class="path">/api/v2/whatsapp/<strong>[<span
+                            class="param">:sessionId</span>]</strong>/send-bulk</span>
             </div>
             <div class="endpoint-body">
                 <div class="description">
@@ -400,7 +407,8 @@
         <div class="endpoint-card">
             <div class="endpoint-header">
                 <span class="method get">GET</span>
-                <span class="path">/api/v2/whatsapp/<span class="param">:sessionId</span>/messages</span>
+                <span class="path">/api/v2/whatsapp/<strong>[<span
+                            class="param">:sessionId</span>]</strong>/messages</span>
             </div>
             <div class="endpoint-body">
                 <div class="description">
@@ -415,7 +423,8 @@
         <div class="endpoint-card">
             <div class="endpoint-header">
                 <span class="method post">POST</span>
-                <span class="path">/api/v2/whatsapp/<span class="param">:sessionId</span>/logout</span>
+                <span class="path">/api/v2/whatsapp/<strong>[<span
+                            class="param">:sessionId</span>]</strong>/logout</span>
             </div>
             <div class="endpoint-body">
                 <div class="description">

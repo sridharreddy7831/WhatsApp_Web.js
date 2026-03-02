@@ -95,6 +95,20 @@ class SessionManager {
             fs.rmSync(authPath, { recursive: true, force: true });
         }
     }
+
+    static async clearAllSessions() {
+        const ids = Array.from(sessions.keys());
+        for (const id of ids) {
+            await this.deleteSession(id);
+        }
+
+        // As a fallback, wipe the entire base auth folder entirely
+        const baseAuthPath = path.join(process.cwd(), `.wwebjs_auth`);
+        if (fs.existsSync(baseAuthPath)) {
+            fs.rmSync(baseAuthPath, { recursive: true, force: true });
+        }
+        console.log("All WhatsApp sessions have been completely wiped.");
+    }
 }
 
 module.exports = SessionManager;

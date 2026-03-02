@@ -244,11 +244,11 @@
         <strong>⚠️ Architecture Note:</strong>
         <br><br>
         <strong>For Single Users:</strong> You do NOT need a session ID! Simply call the root endpoints directly (e.g.,
-        <code>/api/v2/whatsapp/start</code>). The system will automatically link you to a default bot session.
+        <code>/api/whatsapp/start</code>). The system will automatically link you to a default bot session.
         <br><br>
         <strong>For Multi-Tenant Usage:</strong> You can isolate different WhatsApp numbers parallelly by adding a
         dynamic <code>:sessionId</code> parameter in the URL. For example, "John" can use
-        <code>/api/v2/whatsapp/john/start</code> and "Jane" can use <code>/api/v2/whatsapp/jane/start</code> to safely
+        <code>/api/whatsapp/john/start</code> and "Jane" can use <code>/api/whatsapp/jane/start</code> to safely
         isolate data sets simultaneously!
     </div>
 
@@ -258,8 +258,7 @@
         <div class="endpoint-card">
             <div class="endpoint-header">
                 <span class="method all">GET/POST</span>
-                <span class="path">/api/v2/whatsapp/<strong>[<span
-                            class="param">:sessionId</span>]</strong>/start</span>
+                <span class="path">/api/whatsapp/<strong>[<span class="param">:sessionId</span>]</strong>/start</span>
             </div>
             <div class="endpoint-body">
                 <div class="description">
@@ -278,8 +277,7 @@
         <div class="endpoint-card">
             <div class="endpoint-header">
                 <span class="method get">GET</span>
-                <span class="path">/api/v2/whatsapp/<strong>[<span
-                            class="param">:sessionId</span>]</strong>/status</span>
+                <span class="path">/api/whatsapp/<strong>[<span class="param">:sessionId</span>]</strong>/status</span>
             </div>
             <div class="endpoint-body">
                 <div class="description">
@@ -298,7 +296,7 @@
         <div class="endpoint-card">
             <div class="endpoint-header">
                 <span class="method get">GET</span>
-                <span class="path">/api/v2/whatsapp/<strong>[<span class="param">:sessionId</span>]</strong>/qr</span>
+                <span class="path">/api/whatsapp/<strong>[<span class="param">:sessionId</span>]</strong>/qr</span>
             </div>
             <div class="endpoint-body">
                 <div class="description">
@@ -312,7 +310,7 @@
         <div class="endpoint-card">
             <div class="endpoint-header">
                 <span class="method post">POST</span>
-                <span class="path">/api/v2/whatsapp/<strong>[<span class="param">:sessionId</span>]</strong>/pair</span>
+                <span class="path">/api/whatsapp/<strong>[<span class="param">:sessionId</span>]</strong>/pair</span>
             </div>
             <div class="endpoint-body">
                 <div class="description">
@@ -333,7 +331,7 @@
         <div class="endpoint-card">
             <div class="endpoint-header">
                 <span class="method post">POST</span>
-                <span class="path">/api/v2/whatsapp/<strong>[<span class="param">:sessionId</span>]</strong>/send</span>
+                <span class="path">/api/whatsapp/<strong>[<span class="param">:sessionId</span>]</strong>/send</span>
             </div>
             <div class="endpoint-body">
                 <div class="description">
@@ -357,7 +355,7 @@
         <div class="endpoint-card">
             <div class="endpoint-header">
                 <span class="method post">POST</span>
-                <span class="path">/api/v2/whatsapp/<strong>[<span
+                <span class="path">/api/whatsapp/<strong>[<span
                             class="param">:sessionId</span>]</strong>/send-receipt</span>
             </div>
             <div class="endpoint-body">
@@ -386,7 +384,7 @@
         <div class="endpoint-card">
             <div class="endpoint-header">
                 <span class="method post">POST</span>
-                <span class="path">/api/v2/whatsapp/<strong>[<span
+                <span class="path">/api/whatsapp/<strong>[<span
                             class="param">:sessionId</span>]</strong>/send-bulk</span>
             </div>
             <div class="endpoint-body">
@@ -407,7 +405,7 @@
         <div class="endpoint-card">
             <div class="endpoint-header">
                 <span class="method get">GET</span>
-                <span class="path">/api/v2/whatsapp/<strong>[<span
+                <span class="path">/api/whatsapp/<strong>[<span
                             class="param">:sessionId</span>]</strong>/messages</span>
             </div>
             <div class="endpoint-body">
@@ -415,7 +413,7 @@
                     Extracts recent chat history from a thread.
                 </div>
                 <div class="section-title">Usage Example</div>
-                <pre>GET /api/v2/whatsapp/john/messages?phone=9876543210&limit=15</pre>
+                <pre>GET /api/whatsapp/john/messages?phone=9876543210&limit=15</pre>
             </div>
         </div>
 
@@ -423,13 +421,27 @@
         <div class="endpoint-card">
             <div class="endpoint-header">
                 <span class="method post">POST</span>
-                <span class="path">/api/v2/whatsapp/<strong>[<span
-                            class="param">:sessionId</span>]</strong>/logout</span>
+                <span class="path">/api/whatsapp/<strong>[<span class="param">:sessionId</span>]</strong>/logout</span>
             </div>
             <div class="endpoint-body">
                 <div class="description">
                     Safely disconnects this specific session from WhatsApp, kills the puppeteer browser safely, and
                     erases local session memory allowing it to be spun up freshly again next time.
+                </div>
+            </div>
+        </div>
+
+        <!-- Emergency Clear All -->
+        <div class="endpoint-card" style="border-left: 4px solid #d32f2f;">
+            <div class="endpoint-header">
+                <span class="method post" style="background-color: #d32f2f;">POST</span>
+                <span class="path">/api/whatsapp/clear-all</span>
+            </div>
+            <div class="endpoint-body">
+                <div class="description">
+                    <strong>GLOBAL EMERGENCY WIPE.</strong> Destroys every single isolated session concurrently running,
+                    completely wipes the local folder cache of WhatsApp Auth data, and releases all system RAM memory.
+                    Do not pass a session ID to this!
                 </div>
             </div>
         </div>

@@ -11,9 +11,9 @@ But it also fully supports operating as a **simple, default single-user instance
 
 If you just need a standard WhatsApp bot for yourself, skip the `sessionId` param! The API automatically routes you to a background session called `default`.
 
-1. **Start Server:** `GET /api/v2/whatsapp/start`
-2. **Scan QR:** `GET /api/v2/whatsapp/qr`
-3. **Send Message:** `POST /api/v2/whatsapp/send` with `{ "phone": "123...", "message": "Hi" }`
+1. **Start Server:** `GET /api/whatsapp/start`
+2. **Scan QR:** `GET /api/whatsapp/qr`
+3. **Send Message:** `POST /api/whatsapp/send` with `{ "phone": "123...", "message": "Hi" }`
 
 ---
 
@@ -21,9 +21,9 @@ If you just need a standard WhatsApp bot for yourself, skip the `sessionId` para
 
 If 4 people need to use this without stepping on each other's toes, simply slide a `:sessionId` variable into the URL paths:
 
-1. **Start Server (Person A):** `GET /api/v2/whatsapp/personA/start`
-2. **Scan QR (Person A):** `GET /api/v2/whatsapp/personA/qr`
-3. **Person B:** Person B can do the exact same thing independently using `/api/v2/whatsapp/personB/start`! They will never overlap.
+1. **Start Server (Person A):** `GET /api/whatsapp/personA/start`
+2. **Scan QR (Person A):** `GET /api/whatsapp/personA/qr`
+3. **Person B:** Person B can do the exact same thing independently using `/api/whatsapp/personB/start`! They will never overlap.
 
 ---
 
@@ -62,13 +62,14 @@ Simply upload the codebase, run `npm install`, and `npm start` (`node server.js`
 
 ## ⚡ API Endpoints Quick Reference
 
-You can either hit the root `/api/v2/whatsapp/...` (for default single-user), OR hit `/api/v2/whatsapp/:sessionId/...` (for isolated multi-user mode). 
+You can either hit the root `/api/whatsapp/...` (for default single-user), OR hit `/api/whatsapp/:sessionId/...` (for isolated multi-user mode). 
 
-- **Start Client:** `GET /api/v2/whatsapp/start`  *(or `/whatsapp/:sessionId/start`)*
-- **Session Status:** `GET /api/v2/whatsapp/status`
-- **Get QR Code:** `GET /api/v2/whatsapp/qr`
-- **Request Pair Code:** `POST /api/v2/whatsapp/pair { "phone": "98765..." }`
-- **Send Msg:** `POST /api/v2/whatsapp/send { "phone": "...", "message": "Hi" }`
-- **Send Receipt (Base64 file):** `POST /api/v2/whatsapp/send-receipt`
-- **Fetch Chat History:** `GET /api/v2/whatsapp/messages?phone=919876543210&limit=50`
-- **Logout Client:** `POST /api/v2/whatsapp/logout`
+- **Start Client:** `GET /api/whatsapp/start`  *(or `/api/whatsapp/:sessionId/start`)*
+- **Session Status:** `GET /api/whatsapp/status`
+- **Get QR Code:** `GET /api/whatsapp/qr`
+- **Request Pair Code:** `POST /api/whatsapp/pair { "phone": "98765..." }`
+- **Send Msg:** `POST /api/whatsapp/send { "phone": "...", "message": "Hi" }`
+- **Send Receipt (Base64 file):** `POST /api/whatsapp/send-receipt`
+- **Fetch Chat History:** `GET /api/whatsapp/messages?phone=919876543210&limit=50`
+- **Logout Client:** `POST /api/whatsapp/logout`
+- **Emergency Session Wipe:** `POST /api/whatsapp/clear-all` (Wipes all sessions globally)

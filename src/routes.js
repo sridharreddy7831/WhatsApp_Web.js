@@ -12,10 +12,23 @@ function formatPhone(phone) {
     return finalNumber + "@c.us";
 }
 
-// Middleware to inject session using the :sessionId param
-router.use("/whatsapp/:sessionId", (req, res, next) => {
-    const session = SessionManager.getSession(req.params.sessionId);
+// 0. Emergency wipe all
+router.post("/whatsapp/clear-all", async (req, res) => {
+    try {
+        await SessionManager.clearAllSessions();
+        res.json({ success: true, message: "All sessions and entire Whatsapp auth cache safely wiped out." });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Middleware to inject session using the :sessionId param from URL OR default if missing
+router.use(["/whatsapp/:sessionId", "/whatsapp"], (req, res, next) => {
+    // If no sessionId is provided in URL params or body, we fallback to 'default'
+    const sessionId = req.params.sessionId || req.body.sessionId || "default";
+    const session = SessionManager.getSession(sessionId);
     req.sessionData = session;
+    req.mappedSessionId = sessionId;
     next();
 });
 

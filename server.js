@@ -13,7 +13,7 @@ app.use(bodyParser.json({ limit: "50mb" }));
 
 // Root health check
 app.get("/", (req, res) => {
-    res.json({ status: "Microservice running", info: "Use /api/v2/whatsapp/start to begin, or /api/v2/whatsapp/:sessionId/start for multi-user." });
+    res.json({ status: "Microservice running", info: "Use /api/whatsapp/start to begin, or /api/whatsapp/:sessionId/start for multi-user." });
 });
 
 app.get("/health", (req, res) => {
@@ -26,7 +26,7 @@ app.get("/api/docs", (req, res) => {
 });
 
 // Setup Mount point
-app.use("/api/v2", apiRoutes);
+app.use("/api", apiRoutes);
 
 // Export the Express App for serverless (Vercel) configurations
 module.exports = app;
@@ -38,8 +38,8 @@ if (require.main === module) {
         console.log(`\ud83d\ude80 Multi-Session WhatsApp API Microservice running on port ${PORT}`);
         console.log(`🚀 Docs Available at: http://localhost:${PORT}/api/docs`);
         console.log(`-----------------------------------------------------`);
-        console.log(`For Single User:   GET /api/v2/whatsapp/start`);
-        console.log(`For Multi-User:    GET /api/v2/whatsapp/your-name/start`);
+        console.log(`For Single User:   GET /api/whatsapp/start`);
+        console.log(`For Multi-User:    GET /api/whatsapp/your-name/start`);
         console.log(`-----------------------------------------------------\n`);
     });
 }
